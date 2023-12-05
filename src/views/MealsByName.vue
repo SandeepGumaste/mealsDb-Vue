@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch, onMounted } from "vue";
+import { ref, computed, watchEffect, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import store from "../store";
 
@@ -8,11 +8,11 @@ const meals = computed(() => store.state.searchedMeals);
 const route = useRoute();
 
 const getMeals = () => {
-  if (keyword.value) {
+  if (keyword.value && keyword.value.length > 3) {
     store.dispatch("searchMeals", keyword.value);
   }
 };
-watch(() => {
+watchEffect(() => {
   getMeals();
 }, keyword.value);
 
@@ -58,12 +58,17 @@ onMounted(() => {
           >
             Youtube
           </a>
-          <!-- <RouterLink
-            to="/"
+          <RouterLink
+            :to="{
+              name: 'mealDetails',
+              params: {
+                id: meal.idMeal,
+              },
+            }"
             class="px-3 py-2 rounded border-2 border-purple-600 bg-purple-500 hover:bg-purple-600 text-white transition-colors"
           >
             View
-          </RouterLink> -->
+          </RouterLink>
         </div>
       </div>
     </div>
