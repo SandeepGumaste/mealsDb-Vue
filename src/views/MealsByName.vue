@@ -4,6 +4,7 @@ import { useRoute } from "vue-router";
 import store from "../store";
 
 const keyword = ref("");
+const cart = ref([]);
 const meals = computed(() => store.state.searchedMeals);
 const route = useRoute();
 
@@ -12,9 +13,40 @@ const getMeals = () => {
     store.dispatch("searchMeals", keyword.value);
   }
 };
+
+const handleAddToCart = (item) => {
+  let tempCart = [...cart.value];
+  const existingItemIndex = tempCart.findIndex((i) => i.idMeal === item.idMeal);
+  if (existingItemIndex >= 0) {
+    tempCart[existingItemIndex] = {
+      ...tempCart[existingItemIndex],
+      quantity: tempCart[existingItemIndex].quantity + 1,
+    };
+  } else {
+    tempCart = [
+      ...tempCart,
+      {
+        ...item,
+        quantity: 1,
+      },
+    ];
+  }
+
+  cart.value = tempCart;
+};
+
+const removeItemFromCart = (itemId) => {
+  const tempCart = [...cart.value];
+  tempCart.filter((item) => item.idMeal !== itemId);
+  cart.value = tempCart;
+};
 watchEffect(() => {
   getMeals();
 }, keyword.value);
+
+watchEffect(() => {
+  store.dispatch("changeCartItems", cart.value);
+}, cart.value);
 
 onMounted(() => {
   keyword.value = route.params.name;
@@ -51,13 +83,13 @@ onMounted(() => {
         </h3>
         <p></p>
         <div class="py-3 flex items-center gap-3">
-          <a
+          <!-- <a
             :href="meal.strYoutube"
             target="_blank"
             class="px-3 py-2 rounded border-2 border-red-600 bg-red-500 hover:bg-red-600 text-white transition-colors"
           >
             Youtube
-          </a>
+          </a> -->
           <RouterLink
             :to="{
               name: 'mealDetails',
@@ -69,6 +101,12 @@ onMounted(() => {
           >
             View
           </RouterLink>
+          <button
+            class="px-3 py-2 rounded border-2 border-green-600 bg-green-500 hover:bg-green-600 text-white transition-colors"
+            @click="handleAddToCart(meal)"
+          >
+            Add to cart
+          </button>
         </div>
       </div>
     </div>

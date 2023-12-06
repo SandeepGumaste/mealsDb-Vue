@@ -1,5 +1,17 @@
 <script setup>
+import { computed, watch } from "vue";
+import store from "../store";
 import { RouterLink } from "vue-router";
+
+const cart = computed(() => store.state.cart);
+
+const calculateCartTotal = () => {
+  return cart.value.reduce((total, meal) => {
+    return total + Number(meal.idMeal) * meal.quantity;
+  }, 0);
+};
+
+watch(cart.value, () => calculateCartTotal());
 </script>
 
 <template>
@@ -11,6 +23,7 @@ import { RouterLink } from "vue-router";
       Home
     </RouterLink>
     <div class="flex items-center gap-1">
+      <div>cart Total : {{ calculateCartTotal() }} /-</div>
       <RouterLink
         :to="{ name: 'byName' }"
         class="inline-flex items-center px-2 h-full transition-colors hover:bg-purple-100"

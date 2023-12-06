@@ -5,3 +5,7 @@ export async function searchMeals({ commit }, keyword) {
     commit("setSearchedMeals", data.meals);
   });
 }
+
+export function changeCartItems({ commit }, cartItems) {
+  commit("setCartItems", cartItems);
+}
