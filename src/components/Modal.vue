@@ -38,29 +38,32 @@
             </div> -->
             <ul>
                 <li :key="cartItem.strMeal" v-for="(cartItem, index) in cart">
-                    <div class="flex font-semibold border-b-2 py-5 gap-5">
+                    <div class="flex font-semibold border-b-2 py-5 gap-3 items-center">
                         <div>
-                            <img :src="cartItem.strMealThumb" class="w-60" alt="">
+                            <img :src="cartItem.strMealThumb" class="w-40" alt="">
                         </div>
-                        <div class=" p-2 w-full align-middle">
-                            <p class="text-xl">
-                                {{ cartItem.strMeal }}
-                            </p>
-                            <p class="text-sm text-gray-500">
-                                MRP: &#x20B9;{{ cartItem.idMeal }}
-                            </p>
-                        </div>
-                        <div class="flex flex-col h-full justify-between w-[120px]">
-                            <button class="bg-red-600 border-red-500 py-2 rounded mb-5 text-white"
-                                @click="removeItemFromCart(cartItem.idMeal)">
-                                Delete
-                            </button>
-                            <div class="border-2 px-2 rounded flex justify-between items-center">
-                                <label for="qty">Qty</label>
-                                <select :value="cartItem.quantity" name="qty"
-                                    @change="changeQuantity(index, $event.target.value)" class="border-0 focus:outline-0">
-                                    <option :value="qty" v-for="qty of qtyVals">{{ qty }}</option>
-                                </select>
+                        <div class="flex flex-col md:flex-row">
+                            <div class=" p-2 w-full align-middle">
+                                <p class="text-xl max-w-[194px]">
+                                    {{ cartItem.strMeal }}
+                                </p>
+                                <p class="text-sm text-gray-500">
+                                    MRP: &#x20B9;{{ cartItem.idMeal }}
+                                </p>
+                            </div>
+                            <div class="flex flex-col h-full justify-between w-[120px]">
+                                <button class="bg-red-600 border-red-500 py-2 rounded mb-5 text-white"
+                                    @click="removeItemFromCart(cartItem.idMeal)">
+                                    Delete
+                                </button>
+                                <div class="border-2 px-2 rounded flex justify-between items-center">
+                                    <label for="qty">Qty</label>
+                                    <select :value="cartItem.quantity" name="qty"
+                                        @change="changeQuantity(index, $event.target.value)"
+                                        class="border-0 focus:outline-0">
+                                        <option :value="qty" v-for="qty of qtyVals">{{ qty }}</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
