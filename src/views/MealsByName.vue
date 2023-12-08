@@ -4,8 +4,9 @@ import { useRoute } from "vue-router";
 import store from "../store";
 
 const keyword = ref("");
-const cart = ref([]);
 const meals = computed(() => store.state.searchedMeals);
+const currCart = computed(() => store.state.cart);
+const cart = ref(currCart.value || []);
 const route = useRoute();
 
 const getMeals = () => {
@@ -58,6 +59,10 @@ watchEffect(() => {
 watchEffect(() => {
   store.dispatch("changeCartItems", cart.value);
 }, cart.value);
+
+watchEffect(() => {
+  cart.value = currCart.value
+}, currCart)
 
 onMounted(() => {
   keyword.value = route.params.name;
